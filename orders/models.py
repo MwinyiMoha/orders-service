@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models.signals import post_save
 
 from accounts.models import Customer
 from core.utils import BaseModel, unique_order_no
@@ -50,6 +51,17 @@ class Order(BaseModel):
     @property
     def items(self):
         return self.orderitem_set.all()
+
+
+def on_order_created(sender, instance, created, **kwargs):
+    if created:
+        print("New order created")
+
+        # TODO
+        # Implement SMS sending logic here
+
+
+post_save.connect(on_order_created, sender=Order)
 
 
 class OrderItem(BaseModel):
