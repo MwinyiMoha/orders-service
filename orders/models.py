@@ -36,8 +36,8 @@ class Order(BaseModel):
     @property
     def order_info(self):
         subtotal = sum(self.orderitem_set.values_list("item_total", flat=True))
-        vat = subtotal * 0.16
-        shipping = (subtotal + vat) * 0.15
+        vat = subtotal * Decimal("0.16")
+        shipping = (subtotal + vat) * Decimal("0.15")
         total = subtotal + vat + shipping
 
         return {
@@ -46,6 +46,10 @@ class Order(BaseModel):
             "shipping": shipping,
             "total": total,
         }
+
+    @property
+    def items(self):
+        return self.orderitem_set.all()
 
 
 class OrderItem(BaseModel):
