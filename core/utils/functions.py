@@ -9,31 +9,26 @@ def get_random_code(length):
     return code
 
 
-def unique_code():
-    code = get_random_code(5)
+def generate_unique_code(model_name, length):
+    model = None
 
-    if code and any(j.isdigit() for j in code):
-        from accounts.models import Customer
+    from accounts.models import Customer
+    from orders.models import Order
 
-        exists = Customer.objects.filter(code=code)
-        if exists:
-            return unique_code()
-        else:
-            return code
+    models = {"customer": Customer, "order": Order}
+    if model_name in models.keys():
+        model = models.get(model_name)
     else:
-        return unique_code()
+        raise ValueError("Invalid model type")
 
+    code = get_random_code(length)
 
-def unique_order_no():
-    code = get_random_code(7)
-
-    if code and any(j.isdigit() for j in code):
-        from orders.models import Order
-
-        exists = Order.objects.filter(number=code)
-        if exists:
-            return unique_order_no()
-        else:
-            return code
+    if code:
+        if any(j.isdigit() for j in code):
+            exists = model.objects.filter(code=code)
+            if exists:
+                return generate_unique_code()
+            else:
+                return code
     else:
-        return unique_order_no()
+        return generate_unique_code()
