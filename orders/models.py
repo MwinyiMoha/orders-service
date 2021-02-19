@@ -5,8 +5,12 @@ from django.db import models
 from django.db.models.signals import post_save
 
 from accounts.models import Customer
-from core.utils import BaseModel, unique_order_no
+from core.utils import BaseModel, generate_unique_code
 from products.models import Product
+
+
+def unique_order_no():
+    return generate_unique_code("order", 7)
 
 
 class Order(BaseModel):
@@ -24,7 +28,7 @@ class Order(BaseModel):
     )
 
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
-    number = models.CharField(
+    code = models.CharField(
         max_length=7, default=unique_order_no, db_index=True
     )
     status = models.CharField(
@@ -32,7 +36,7 @@ class Order(BaseModel):
     )
 
     def __str__(self):
-        return f"Order {self.number}"
+        return f"Order {self.code}"
 
     @property
     def order_info(self):

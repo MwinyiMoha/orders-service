@@ -4,8 +4,8 @@ from .models import Order, OrderItem
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ["number", "customer", "status", "updated"]
-    list_display_links = ["number"]
+    list_display = ["code", "customer", "status", "updated"]
+    list_display_links = ["code"]
 
 
 class OrderItemAdmin(admin.ModelAdmin):
