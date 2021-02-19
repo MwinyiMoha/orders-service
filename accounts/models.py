@@ -2,6 +2,7 @@ import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models.signals import post_save
 from django.utils.text import slugify
 
 from core.utils import BaseModel, unique_code
@@ -38,3 +39,13 @@ class Customer(BaseModel):
 
     def __str__(self):
         return f"customer {self.user}"
+
+
+def on_user_created(sender, instance, created, **kwargs):
+    if created:
+        c = Customer()
+        c.user = instance
+        c.save()
+
+
+post_save.connect(on_user_created, sender=User)
