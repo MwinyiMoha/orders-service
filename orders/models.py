@@ -1,7 +1,11 @@
+from decimal import Decimal
+
+from django.core.validators import MinValueValidator
 from django.db import models
 
 from accounts.models import Customer
 from core.utils import BaseModel, unique_order_no
+from products.models import Product
 
 
 class Order(BaseModel):
@@ -40,3 +44,24 @@ class Order(BaseModel):
     @property
     def amount(self):
         pass
+
+
+class OrderItem(BaseModel):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    quantity = models.PositiveIntegerField(
+        default=1, validators=[MinValueValidator(1)]
+    )
+    item_total = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal("0.01"))],
+    )
+
+    def __str__(self):
+        return f"Item: {self.quantity} * {self.product}"
+
+    def save(self, *args, **kwargs):
+        self.item_total = self.quantity * self.product.price
+
+        super(OrderItem, self).save(*args, **kwargs)
