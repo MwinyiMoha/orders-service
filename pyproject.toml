@@ -21,10 +21,11 @@ requests = "^2.25.1"
 flake8 = "^3.8.4"
 black = "^20.8b1"
 pre-commit = "^2.10.1"
+pytest-django = "^4.1.0"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-raq --cov=. --cov-report xml"
+addopts = "-raq --cov=. --cov-report html --ds=core.settings"
 testpaths = [
 	"tests"
 ]
