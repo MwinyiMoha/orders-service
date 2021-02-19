@@ -31,6 +31,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "accounts",
+    "products",
+    "api",
+    "orders",
 ]
 
 MIDDLEWARE = [
@@ -76,3 +81,9 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
+# Authentication settings
+# https://docs.djangoproject.com/en/3.1/topics/auth/default/
+
+AUTH_USER_MODEL = "accounts.User"
