@@ -5,7 +5,11 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.utils.text import slugify
 
-from core.utils import BaseModel, unique_code
+from core.utils import BaseModel, generate_unique_code
+
+
+def unique_customer_code():
+    return generate_unique_code("customer", 5)
 
 
 class User(AbstractUser):
@@ -33,7 +37,7 @@ class Customer(BaseModel):
     user = models.OneToOneField(User, on_delete=models.PROTECT)
 
     code = models.CharField(
-        unique=True, db_index=True, max_length=5, default=unique_code
+        unique=True, db_index=True, max_length=5, default=unique_customer_code
     )
     phone = models.CharField(max_length=12, default="254")
 
