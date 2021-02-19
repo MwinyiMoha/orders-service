@@ -4,6 +4,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.text import slugify
 
+from core.utils import BaseModel, unique_code
+
 
 class User(AbstractUser):
 
@@ -24,3 +26,15 @@ class User(AbstractUser):
 
         self.username = slugify(name_str)
         super(User, self).save(*args, **kwargs)
+
+
+class Customer(BaseModel):
+    user = models.OneToOneField(User, on_delete=models.PROTECT)
+
+    code = models.CharField(
+        unique=True, db_index=True, max_length=5, default=unique_code
+    )
+    phone = models.CharField(max_length=12, default="254")
+
+    def __str__(self):
+        return f"customer {self.user}"
