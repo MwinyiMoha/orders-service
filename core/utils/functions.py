@@ -32,3 +32,11 @@ def generate_unique_code(model_name, length):
                 return code
     else:
         return generate_unique_code()
+
+
+def unique_code():
+    pass
+
+
+def unique_order_no():
+    pass
